@@ -7,6 +7,7 @@ class CreateHotels < ActiveRecord::Migration[5.2]
       t.string :city
       t.string :country
       t.string :postal_code
+      t.string :description
       t.decimal :lat, precision: 10, scale: 6
       t.decimal :lng, precision: 10, scale: 6
       t.string :amenities_general, array: true, default: []

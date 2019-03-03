@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 2019_03_02_173204) do
     t.string "city"
     t.string "country"
     t.string "postal_code"
+    t.string "description"
     t.decimal "lat", precision: 10, scale: 6
     t.decimal "lng", precision: 10, scale: 6
     t.string "amenities_general", default: [], array: true
