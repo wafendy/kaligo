@@ -12,14 +12,22 @@
 
 ActiveRecord::Schema.define(version: 2019_03_02_173204) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "hotels", id: :string, force: :cascade do |t|
     t.integer "destination_id"
     t.string "name"
-    t.json "location"
-    t.text "description"
-    t.json "amenities"
-    t.json "images"
-    t.json "booking_conditions"
+    t.string "address"
+    t.string "city"
+    t.string "country"
+    t.string "postal_code"
+    t.decimal "lat", precision: 10, scale: 6
+    t.decimal "lng", precision: 10, scale: 6
+    t.string "amenities_general", default: [], array: true
+    t.string "amenities_room", default: [], array: true
+    t.jsonb "images", default: {}
+    t.text "booking_conditions", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["destination_id"], name: "index_hotels_on_destination_id"
@@ -28,7 +36,7 @@ ActiveRecord::Schema.define(version: 2019_03_02_173204) do
   create_table "suppliers", force: :cascade do |t|
     t.string "name"
     t.string "api_base_url"
-    t.json "column_maps"
+    t.jsonb "column_maps"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
