@@ -35,6 +35,16 @@ class Hotel < ApplicationRecord
     'bathtub'
   ].freeze
 
+  scope :for_hotels, ->(hotel_ids) do
+    return all if hotel_ids.blank?
+    where(id: hotel_ids)
+  end
+
+  scope :for_destination, ->(destination_id) do
+    return all if destination_id.blank?
+    where(destination_id: destination_id)
+  end
+
   def self.sanitize_amenities_general(original)
     return [] if original.nil?
     original.map do |k|
