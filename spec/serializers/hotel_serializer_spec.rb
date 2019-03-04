@@ -14,7 +14,6 @@ describe HotelSerializer do
           destination_id: hotel.destination_id,
           name: hotel.name,
           description: hotel.description,
-          images: hotel.images,
           booking_conditions: hotel.booking_conditions,
           location: {
             lat: hotel.lat.to_f,
@@ -26,6 +25,11 @@ describe HotelSerializer do
           amenities: {
             general: hotel.amenities_general,
             room: hotel.amenities_room
+          },
+          images: {
+            rooms: hotel.images_rooms,
+            site: hotel.images_site,
+            amenities: hotel.images_amenities
           }
         }
       }
