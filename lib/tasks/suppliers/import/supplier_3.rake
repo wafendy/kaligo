@@ -9,16 +9,32 @@ namespace :suppliers do
 
       result = supplier_hotels.each do |supplier_hotel|
         supplier_id = supplier_hotel['id'].strip
-        existing_amenities_general = Hotel.find_by(id: supplier_id).try(:amenities_general) || []
-        existing_amenities_room = Hotel.find_by(id: supplier_id).try(:amenities_room) || []
+        current_hotel = Hotel.find_by(id: supplier_id)
+
+        existing_amenities_general = current_hotel.try(:amenities_general) || []
+        existing_amenities_room = current_hotel.try(:amenities_room) || []
         sanitized_amenities_general = Hotel.sanitize_amenities_general(supplier_hotel['amenities'])
         sanitized_amenities_room = Hotel.sanitize_amenities_room(supplier_hotel['amenities'])
 
-        existing_name = Hotel.find_by(id: supplier_id).try(:name) || ''
-        existing_description = Hotel.find_by(id: supplier_id).try(:description) || ''
-        existing_address = Hotel.find_by(id: supplier_id).try(:address) || ''
+        existing_name = current_hotel.try(:name) || ''
+        existing_description = current_hotel.try(:description) || ''
+        existing_address = current_hotel.try(:address) || ''
 
-        existing_images = Hotel.find_by(id: supplier_id).try(:images) || {}
+        existing_images_rooms = current_hotel.try(:images_rooms) || []
+        existing_images_amenities = current_hotel.try(:images_amenities) || []
+
+        sanitized_images_rooms = supplier_hotel['images']['rooms'].map do |img|
+          {
+            link: img['url'],
+            description: img['description']
+          }
+        end
+        sanitized_images_amenities = supplier_hotel['images']['amenities'].map do |img|
+          {
+            link: img['url'],
+            description: img['description']
+          }
+        end
 
         hotel_json = {
           id: supplier_id,
@@ -30,7 +46,8 @@ namespace :suppliers do
           description: [supplier_hotel['info'].try(:strip), existing_description].compact.max_by(&:length),
           amenities_general: sanitized_amenities_general.concat(existing_amenities_general).uniq,
           amenities_room: sanitized_amenities_room.concat(existing_amenities_room).uniq,
-          images: existing_images.merge(supplier_hotel['images'])
+          images_rooms: sanitized_images_rooms.concat(existing_images_rooms),
+          images_amenities: sanitized_images_amenities.concat(existing_images_amenities)
         }
 
         hotels_array << Hotel.new(hotel_json)

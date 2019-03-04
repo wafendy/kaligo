@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_02_173204) do
+ActiveRecord::Schema.define(version: 2019_03_02_163451) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,19 +27,13 @@ ActiveRecord::Schema.define(version: 2019_03_02_173204) do
     t.decimal "lng", precision: 10, scale: 6
     t.string "amenities_general", default: [], array: true
     t.string "amenities_room", default: [], array: true
-    t.jsonb "images", default: {}
+    t.string "images_rooms", default: [], array: true
+    t.string "images_site", default: [], array: true
+    t.string "images_amenities", default: [], array: true
     t.text "booking_conditions", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["destination_id"], name: "index_hotels_on_destination_id"
-  end
-
-  create_table "suppliers", force: :cascade do |t|
-    t.string "name"
-    t.string "api_base_url"
-    t.jsonb "column_maps"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
 end

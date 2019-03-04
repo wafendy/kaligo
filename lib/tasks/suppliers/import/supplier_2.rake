@@ -9,17 +9,34 @@ namespace :suppliers do
 
       result = supplier_hotels.each do |supplier_hotel|
         supplier_id = supplier_hotel['hotel_id'].strip
-        existing_amenities_general = Hotel.find_by(id: supplier_id).try(:amenities_general) || []
-        existing_amenities_room = Hotel.find_by(id: supplier_id).try(:amenities_room) || []
+        current_hotel = Hotel.find_by(id: supplier_id)
+
+        existing_amenities_general = current_hotel.try(:amenities_general) || []
+        existing_amenities_room = current_hotel.try(:amenities_room) || []
         sanitized_amenities_general = Hotel.sanitize_amenities_general(supplier_hotel['amenities']['general'])
         sanitized_amenities_room = Hotel.sanitize_amenities_room(supplier_hotel['amenities']['room'])
 
-        existing_name = Hotel.find_by(id: supplier_id).try(:name) || ''
-        existing_description = Hotel.find_by(id: supplier_id).try(:description) || ''
-        existing_address = Hotel.find_by(id: supplier_id).try(:address) || ''
+        existing_name = current_hotel.try(:name) || ''
+        existing_description = current_hotel.try(:description) || ''
+        existing_address = current_hotel.try(:address) || ''
 
-        existing_images = Hotel.find_by(id: supplier_id).try(:images) || {}
-        existing_booking_conditions = Hotel.find_by(id: supplier_id).try(:booking_conditions) || []
+        existing_booking_conditions = current_hotel.try(:booking_conditions) || []
+
+        existing_images_rooms = current_hotel.try(:images_rooms) || []
+        existing_images_site = current_hotel.try(:images_site) || []
+
+        sanitized_images_rooms = supplier_hotel['images']['rooms'].map do |img|
+          {
+            link: img['link'],
+            description: img['caption']
+          }
+        end
+        sanitized_images_site = supplier_hotel['images']['site'].map do |img|
+          {
+            link: img['link'],
+            description: img['caption']
+          }
+        end
 
         hotel_json = {
           id: supplier_id,
@@ -30,7 +47,8 @@ namespace :suppliers do
           description: [supplier_hotel['details'].try(:strip), existing_description].compact.max_by(&:length),
           amenities_general: sanitized_amenities_general.concat(existing_amenities_general).uniq,
           amenities_room: sanitized_amenities_room.concat(existing_amenities_room).uniq,
-          images: existing_images.merge(supplier_hotel['images']),
+          images_rooms: sanitized_images_rooms.concat(existing_images_rooms),
+          images_site: sanitized_images_site.concat(existing_images_site),
           booking_conditions: supplier_hotel['booking_conditions'].concat(existing_booking_conditions).uniq
         }
 

@@ -12,7 +12,9 @@ class CreateHotels < ActiveRecord::Migration[5.2]
       t.decimal :lng, precision: 10, scale: 6
       t.string :amenities_general, array: true, default: []
       t.string :amenities_room, array: true, default: []
-      t.jsonb :images, default: {}
+      t.string :images_rooms, array: true, default: []
+      t.string :images_site, array: true, default: []
+      t.string :images_amenities, array: true, default: []
       t.text :booking_conditions, array: true, default: []
       t.timestamps
     end

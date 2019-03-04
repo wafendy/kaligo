@@ -1,6 +1,6 @@
 class HotelSerializer
   include FastJsonapi::ObjectSerializer
-  attributes :id, :destination_id, :name, :description, :images, :booking_conditions
+  attributes :destination_id, :name, :description, :booking_conditions
 
   attribute :location do |object|
     {
@@ -16,6 +16,14 @@ class HotelSerializer
     {
       general: object.amenities_general,
       room: object.amenities_room
+    }
+  end
+
+  attribute :images do |object|
+    {
+      rooms: object.images_rooms,
+      site: object.images_site,
+      amenities: object.images_amenities
     }
   end
 end
