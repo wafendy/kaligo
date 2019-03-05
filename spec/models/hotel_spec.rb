@@ -22,8 +22,17 @@ describe Hotel do
 
   context 'helpers' do
     describe '#self.sanitize_amenities_general' do
+      subject { Hotel.sanitize_amenities_general(input) }
+      let(:input) { ["Pool", "WiFi ", "Aircon", "BathTub", " DryCleaning", "Bar "] }
+
+      it { is_expected.to eq ['pool', 'wifi', 'dry cleaning']}
     end
+
     describe '#self.sanitize_amenities_room' do
+      subject { Hotel.sanitize_amenities_room(input) }
+      let(:input) { ["Pool", "WiFi ", "Aircon", "Bathtub", " DryCleaning", "Bar "] }
+
+      it { is_expected.to eq ['aircon', 'bathtub']}
     end
   end
 end

@@ -1,19 +1,4 @@
 class Hotel < ApplicationRecord
-  DB_COLUMNS = [
-    'destination_id',
-    'name',
-    'address',
-    'lat',
-    'lng',
-    'city',
-    'country',
-    'postal_code',
-    'amenities_general',
-    'amenities_room',
-    'images',
-    'booking_conditions'
-  ].freeze
-
   AMENITIES_GENERAL = [
     'outdoor pool',
     'indoor pool',
