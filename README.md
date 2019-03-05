@@ -19,6 +19,27 @@ rake suppliers:import:supplier_2    # Import all Supplier 2 data API
 rake suppliers:import:supplier_3    # Import all Supplier 3 data API
 ```
 
+## How to use the API?
+
+### List all hotels
+```
+GET http://localhost:3000/v1/hotels
+```
+
+### Applying filter
+
+#### Filter by destination
+```
+GET http://localhost:3000/v1/hotels?destination_id=1122
+```
+
+#### Filter by hotels
+
+The `hotels` query param is in array format
+```
+GET http://localhost:3000/v1/hotels?hotels[]=if8c9&hotels[]=f8c9
+```
+
 ## Reasoning
 
 Aggregating data on the fly can be really slow and bad for User Experience and can really hurt the SEO performance. Therefore I chose to save the aggregated(processed) data in the single DB.
@@ -56,4 +77,3 @@ There are many other improvements which could be done:
 3. Apply URL shortener strategy (i.e. http://kaligo.url/UXbT1LSa) for all incoming urls (including images).
 4. Array values, detecting similar or duplicate array value in Booking Conditions
 5. Standardising the amenities keywords (i.e. `pool` can be mapped to `outdoor pool`, `BathTub` can be replaced with `Bathtub`, etc)
-6. Use `CloudFront` for maximum performance and availability.
